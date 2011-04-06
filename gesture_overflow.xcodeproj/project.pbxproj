@@ -39,6 +39,7 @@
 
 /* Begin PBXFileReference section */
 		EA20CC241348FA0600D80F67 /* libBox2D.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libBox2D.dylib; path = usr/local/lib/libBox2D.dylib; sourceTree = SDKROOT; };
+		EAC81CB9134C95F9007527E5 /* haarcascade_frontalface_default.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = haarcascade_frontalface_default.xml; sourceTree = "<group>"; };
 		EAF1753513481E5800448E21 /* gesture_overflow */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = gesture_overflow; sourceTree = BUILT_PRODUCTS_DIR; };
 		EAF1753913481E5800448E21 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		EAF1753B13481E5800448E21 /* gesture_overflow.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = gesture_overflow.1; sourceTree = "<group>"; };
@@ -84,9 +85,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		EAC81CBB134C9600007527E5 /* Cascades */ = {
+			isa = PBXGroup;
+			children = (
+				EAC81CB9134C95F9007527E5 /* haarcascade_frontalface_default.xml */,
+			);
+			name = Cascades;
+			sourceTree = "<group>";
+		};
 		EAF1752A13481E5800448E21 = {
 			isa = PBXGroup;
 			children = (
+				EAC81CBB134C9600007527E5 /* Cascades */,
 				EAF1755313482D0300448E21 /* Frameworks */,
 				EAF1753813481E5800448E21 /* Gesture Overflow */,
 				EAF1753613481E5800448E21 /* Products */,
