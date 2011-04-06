@@ -3,61 +3,29 @@
 #include <opencv/cv.h>
 #include <opencv/highgui.h>
 #include <libfreenect_sync.h>
+#include <Box2D/Box2D.h>
 
+// Assumes 11 bit depth buffer.
 IplImage *GlViewColor(IplImage *depth) 
 { 
 	static IplImage *image = 0; 
 	if (!image) image = cvCreateImage(cvSize(640,480),8 ,3); 
 	char *depth_mid = image->imageData; 
-	int i; 
+	int i;
 	for (i = 0; i < 640*480; i++) 
 	{ 
-		int lb = ((short *)depth->imageData)[i] % 256; 
-		int ub = ((short *)depth->imageData)[i] / 256; 
-		switch (ub) 
-		{ 
-			case 0: 
-				depth_mid[3*i+2] = 0; 
-				depth_mid[3*i+1] = 0; 
-				depth_mid[3*i+0] = 255; 
-				break; 
-			case 1: 
-				depth_mid[3*i+2] = 0; 
-				depth_mid[3*i+1] = 0; 
-				depth_mid[3*i+0] = 255; 
-				break; 
-			case 2: 
-				depth_mid[3*i+2] = 0; 
-				depth_mid[3*i+1] = 255; 
-				depth_mid[3*i+0] = 0; 
-				break; 
-			case 3: 
-				depth_mid[3*i+2] = 255; 
-				depth_mid[3*i+1] = 0; 
-				depth_mid[3*i+0] = 0; 
-				break; 
-			case 4: 
-				depth_mid[3*i+2] = 0; 
-				depth_mid[3*i+1] = 255; 
-				depth_mid[3*i+0] = 255; 
-				break; 
-			case 5: 
-				depth_mid[3*i+2] = 255; 
-				depth_mid[3*i+1] = 255; 
-				depth_mid[3*i+0] = 255; 
-				break; 
-			default: 
-				depth_mid[3*i+2] = 255; 
-				depth_mid[3*i+1] = 255; 
-				depth_mid[3*i+0] = 0; 
-				break; 
-		} 
-	} 
-	return image; 
+		int level = ((short *)depth->imageData)[i];
+		float ratio = (float)level / 2048;
+		int grayLevel = 255 * ratio;
+		depth_mid[3*i+2] = depth_mid[3*i+1] = depth_mid[3*i+0] = grayLevel;
+	}
+	return image;
 } 
 
 int main()
-{   
+{
+	b2Vec2 gravity(0.0f, -10.0f);
+	
 	IplImage *image = cvCreateImageHeader(cvSize(640,480), 8, 3);
 	while (cvWaitKey(10) < 0) 
 	{

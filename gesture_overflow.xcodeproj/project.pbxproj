@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		EA20CC251348FA0600D80F67 /* libBox2D.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = EA20CC241348FA0600D80F67 /* libBox2D.dylib */; };
 		EAF1753A13481E5800448E21 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EAF1753913481E5800448E21 /* main.cpp */; };
 		EAF175571348337900448E21 /* libusb-1.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = EAF175561348337900448E21 /* libusb-1.0.dylib */; };
 		EAF17559134833BD00448E21 /* libfreenect_sync.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = EAF17558134833BD00448E21 /* libfreenect_sync.dylib */; };
@@ -37,6 +38,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		EA20CC241348FA0600D80F67 /* libBox2D.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libBox2D.dylib; path = usr/local/lib/libBox2D.dylib; sourceTree = SDKROOT; };
 		EAF1753513481E5800448E21 /* gesture_overflow */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = gesture_overflow; sourceTree = BUILT_PRODUCTS_DIR; };
 		EAF1753913481E5800448E21 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		EAF1753B13481E5800448E21 /* gesture_overflow.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = gesture_overflow.1; sourceTree = "<group>"; };
@@ -61,6 +63,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EA20CC251348FA0600D80F67 /* libBox2D.dylib in Frameworks */,
 				EAF1756A1348388900448E21 /* libopencv_calib3d.dylib in Frameworks */,
 				EAF1756B1348388900448E21 /* libopencv_contrib.dylib in Frameworks */,
 				EAF1756C1348388900448E21 /* libopencv_core.dylib in Frameworks */,
@@ -111,6 +114,7 @@
 		EAF1755313482D0300448E21 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				EA20CC241348FA0600D80F67 /* libBox2D.dylib */,
 				EAF1755E1348388900448E21 /* libopencv_calib3d.dylib */,
 				EAF1755F1348388900448E21 /* libopencv_contrib.dylib */,
 				EAF175601348388900448E21 /* libopencv_core.dylib */,
@@ -204,6 +208,7 @@
 					"/usr/local/Cellar/opencv/2.2/include/**",
 					"/usr/local/Cellar/libfreenect/master/include/**",
 					"/usr/local/Cellar/libusb-freenect/7da756e09fd97efad2b3/include/**",
+					"/usr/local/Cellar/box2d/2.1.2/include/**",
 				);
 				LIBRARY_SEARCH_PATHS = "";
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
@@ -228,6 +233,7 @@
 					"/usr/local/Cellar/opencv/2.2/include/**",
 					"/usr/local/Cellar/libfreenect/master/include/**",
 					"/usr/local/Cellar/libusb-freenect/7da756e09fd97efad2b3/include/**",
+					"/usr/local/Cellar/box2d/2.1.2/include/**",
 				);
 				LIBRARY_SEARCH_PATHS = "";
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
@@ -277,6 +283,7 @@
 				EAF1754013481E5800448E21 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
