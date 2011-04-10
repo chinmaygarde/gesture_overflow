@@ -80,7 +80,7 @@ void cvOverlayImage(IplImage* src, IplImage* overlay, CvPoint location, CvScalar
 }
 
 // Assumes 11 bit depth buffer.
-IplImage *GlViewColor(IplImage *depth, Circle focusArea) 
+IplImage *ColorGradedImage(IplImage *depth, Circle focusArea) 
 {
 	Point topLeft, bottomRight;
 	topLeft.x = focusArea.center.x - focusArea.radius;
@@ -97,33 +97,38 @@ IplImage *GlViewColor(IplImage *depth, Circle focusArea)
 	
 	Mat frame;
 	frame = image;
-	
+	/*
+	// For Depth Buffer Visualization
 	for(i=0; i<depth->width*depth->height; i++) {
-		depth_mid[3*i+2] = 0;
-		depth_mid[3*i+1] = 0;
-		depth_mid[3*i+0] = 0;
+		int level = ((short *)depth->imageData)[i];
+		depth_mid[3*i+2] = 255 - (level * 255/2048.0f);
+		depth_mid[3*i+1] = 255 - (level * 255/2048.0f);
+		depth_mid[3*i+0] = 255 - (level * 255/2048.0f);
 	}
+	*/
 	
 	Point c = cvPoint((bottomRight.x - topLeft.x) / 2 + topLeft.x, (bottomRight.y - topLeft.y) / 2 + topLeft.y);
 	
 	int scalarPoint = c.x * c.y;
 	int samplePointLevel = ((short *)depth->imageData)[scalarPoint];
-	
+
+
+	// Weighted exclusion
 	for(i=0; i<depth->width*depth->height; i++) {
 		int level = ((short *)depth->imageData)[i];
-		if(level < samplePointLevel - 300) {
+		if(level < samplePointLevel - 200) {
 			depth_mid[3*i+2] = 255;
 			depth_mid[3*i+1] = 255;
 			depth_mid[3*i+0] = 255;
 		}
+		else {
+			depth_mid[3*i+2] = 0;
+			depth_mid[3*i+1] = 0;
+			depth_mid[3*i+0] = 0;
+		}
 	}
-	
-	
-	//char descText[100];
-	//sprintf(descText, "Sampling from %d, %d.", c.x, c.y);
-	//cvPutText(image, descText, cvPoint(20, 20), &font, CV_RGB(0, 255, 0));
-	//circle(frame, c, 10, CV_RGB(0, 255, 0));
-	//rectangle(frame, topLeft, bottomRight, CV_RGB(0, 255, 0));
+
+
 	return image;
 }
 
@@ -151,11 +156,9 @@ void gestureDetect(IplImage *src) {
 	cvCvtColor(src, hsv_mask, CV_BGR2GRAY);
 	
 	//Filters noise
-	//cvCvtColor(hsv_image, hsv_mask, CV_HS)
 	//cvInRangeS (hsv_image, hsv_min, hsv_max, hsv_mask);
 	
 	cvSmooth( hsv_mask, hsv_mask, CV_MEDIAN, 27, 0, 0, 0 );
-	cvShowImage("Test", hsv_mask);
 	cvCanny(hsv_mask, hsv_edge, 1, 3, 5);
 	cvFindContours( hsv_mask, storage, &contours, sizeof(CvContour), CV_RETR_LIST, CV_CHAIN_APPROX_SIMPLE, cvPoint(0,0) );
 	CvSeq* contours2 = NULL;
@@ -194,6 +197,8 @@ int main()
 {
 	// Load cascade
 	CascadeClassifier cascade;
+	
+	// TODO: Change as necessary
 	if(!cascade.load("/Users/Buzzy/VersionControlled/Git/gesture_overflow/haarcascade_frontalface_default.xml")) {
 		printf("Could not load cascade file");
 	}
@@ -210,17 +215,27 @@ int main()
 		freenect_sync_get_video((void**)(&data), &timestamp, 0, FREENECT_VIDEO_RGB);
 		cvSetData(image, data, image->widthStep);
 		cvCvtColor(image, image, CV_RGB2BGR);
-		cvShowImage("Video", image);
 		
 		// Haar Classification
 		imgFrame = image;
 		Circle c = detectFace(imgFrame, cascade, 1);
 		
+		// Potential Demo Fail
+		// Detected Face
+		cvRectangle(image, cvPoint(c.center.x - 20, c.center.y - 20), cvPoint(c.center.x + 20, c.center.y + 20), CV_RGB(255, 0, 0));
+		cvRectangle(image, cvPoint(c.center.x - 10, c.center.y - 10), cvPoint(c.center.x + 10, c.center.y + 10), CV_RGB(0, 255, 0));
+		cvRectangle(image, cvPoint(c.center.x - 5, c.center.y - 5), cvPoint(c.center.x + 5, c.center.y + 5), CV_RGB(0, 0, 255));
+		
+		 
+		cvShowImage("Video", image);
+		
 		// Depth Image Processing
 		freenect_sync_get_depth((void**)(&data), &timestamp, 0, FREENECT_DEPTH_11BIT);
 		cvSetData(image, data, image->widthStep);
-		postDepth = GlViewColor(image, c);
-		cvShowImage("Depth", postDepth);
+		
+		postDepth = ColorGradedImage(image, c);
+
+		cvShowImage("Depth", postDepth);		
 		gestureDetect(postDepth);
 	}
 	freenect_sync_stop();       
